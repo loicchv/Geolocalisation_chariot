@@ -10,7 +10,7 @@ vector<Beacon> listeBeacons5SEC;
 vector<Beacon> listeBeacons1H;
 moduleGPS monGPS(&Serial2, 27, 26);
 BeaconPublication* beaconPub;
-liaisonMKRWAN mkrwan(16,17)
+liaisonMKRWAN mkrwan(16,17);
 
 String formatTrame(vector<Beacon> liste){
   String trame = "";
@@ -40,41 +40,36 @@ void setup() {
 void loop() {
   monGPS.lireTrameGPGGA();
 
-  // beaconPub->set_longitude(monGPS.get_longitude().toFloat());
-  // beaconPub->set_latitude(monGPS.get_latitude().toFloat());
-  // beaconPub->start(dureeScan);
-  // listeBeacons = beaconPub->get_vectorBeacon();
-
-  for(int k = 0; k < 5; k++){
+  for(int k = 0; k < 720; k++){
     //Scan des beacons
     beaconPub->start(dureeScan);
     listeBeacons5SEC = beaconPub->get_vectorBeacon();
 
 
     //Dédoublonnage des beacons
-  for(int i = 0; i < listeBeacons5SEC.size(); i++) {
-      Beacon beacon5s = listeBeacons5SEC[i];
-      bool estPresent = false;
-      int iPresent = 0; 
+    for(int i = 0; i < listeBeacons5SEC.size(); i++) {
+        Beacon beacon5s = listeBeacons5SEC[i];
+        bool estPresent = false;
+        int iPresent = 0; 
 
-      for(int j = 0; j < listeBeacons1H.size(); j++) {
-          Beacon beacon1h = listeBeacons1H[j];
+        for(int j = 0; j < listeBeacons1H.size(); j++) {
+            Beacon beacon1h = listeBeacons1H[j];
 
-          if(beacon5s.get_manufactureId() == beacon1h.get_manufactureId() && beacon5s.get_major() == beacon1h.get_major() && beacon5s.get_minor() == beacon1h.get_minor()) { 
-              estPresent = true;
-              iPresent = j;
-              break;
-          }
-      }
-      if(estPresent) {
-        if (beacon5s.get_rssi() > listeBeacons1H[iPresent].get_rssi()){
-          listeBeacons1H[iPresent] = beacon5s;
+            if(beacon5s.get_manufactureId() == beacon1h.get_manufactureId() && beacon5s.get_major() == beacon1h.get_major() && beacon5s.get_minor() == beacon1h.get_minor()) { 
+                estPresent = true;
+                iPresent = j;
+                break;
+            }
         }
+        if(estPresent) {
+          if (beacon5s.get_rssi() > listeBeacons1H[iPresent].get_rssi()){
+            listeBeacons1H[iPresent] = beacon5s;
+          }
 
-      } else {    
-          listeBeacons1H.push_back(beacon5s); 
+        } else {    
+            listeBeacons1H.push_back(beacon5s); 
+        }
       }
-    }
   }
 
   //Supprimer les beacons incomplets
@@ -87,7 +82,11 @@ void loop() {
   //Mettre la liste des beacons sour le format d'une trame
   String trameFormater = formatTrame(listeBeacons1H); 
   //Envoie de la trame vers la carte mkrwan
-  mkrwan.sendData(trameFormater);
+  if(trameFormater!="{}"){
+    mkrwan.sendData(trameFormater);
+    Serial.print("Envoi effectuer :");
+    Serial.println(trameFormater);
+  } 
 
   beaconPub->clear();
   
