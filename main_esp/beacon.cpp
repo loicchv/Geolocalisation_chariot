@@ -1,6 +1,6 @@
 #include "beacon.h"
 
-Beacon::Beacon(int mId, int maj, int min, int rss, float lat, float longi, String heur){
+Beacon::Beacon(int mId, int maj, int min, int rss, int lat, int longi, String heur){
     manufactureId = mId;
     major = maj;
     minor = min;
