@@ -14,7 +14,7 @@ class Beacon{
       String heure;
 
     public:
-      Beacon(int mId, int maj, int min, int rss, float lat, float longi, String heur);
+      Beacon(int mId, int maj, int min, int rss, int lat, int longi, String heur);
       int get_manufactureId();
       int get_major();
       int get_minor();
