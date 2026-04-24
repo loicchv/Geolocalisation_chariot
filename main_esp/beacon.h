@@ -9,8 +9,8 @@ class Beacon{
       int major;
       int minor;
       int rssi;
-      float longitude;
-      float latitude;
+      int longitude;
+      int latitude;
       String heure;
 
     public:
