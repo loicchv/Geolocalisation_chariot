@@ -29,6 +29,30 @@ String formatTrame(vector<Beacon> liste){
   return trame;
 }
 
+vector<Beacon> integrerNouveaux(vector<Beacon> listeEnvoi, vector<Beacon> listeNouveaux){
+  for(int i = 0; i < listeNouveaux.size(); i++) {
+    Beacon newBeacon = listeNouveaux[i];
+    bool estPresent = false;
+    int iPresent = 0; 
+
+    for(int j = 0; j < listeEnvoi.size(); j++) {
+        Beacon beaconEnvoi = listeEnvoi1H[j];
+
+        if(newBeacon.get_manufactureId() == beaconEnvoi.get_manufactureId() && newBeacon.get_major() == beaconEnvoi.get_major() && newBeacon.get_minor() == beaconEnvoi.get_minor()) { 
+            estPresent = true;
+            iPresent = j;
+            break;
+        }
+    }
+    if(estPresent) {
+      if (newBeacon.get_rssi() > listeEnvoi[iPresent].get_rssi()){listeEnvoi[iPresent] = newBeacon;}
+    } else {    
+        listeEnvoi.push_back(newBeacon); 
+    }
+  }
+  return listeEnvoi;
+}
+
 void setup() {
   Serial.begin(115200);
   beaconPub = new BeaconPublication(&monGPS);
@@ -44,32 +68,8 @@ void loop() {
     //Scan des beacons
     beaconPub->start(dureeScan);
     listeBeacons5SEC = beaconPub->get_vectorBeacon();
-
-
     //Dédoublonnage des beacons
-    for(int i = 0; i < listeBeacons5SEC.size(); i++) {
-        Beacon beacon5s = listeBeacons5SEC[i];
-        bool estPresent = false;
-        int iPresent = 0; 
-
-        for(int j = 0; j < listeBeacons1H.size(); j++) {
-            Beacon beacon1h = listeBeacons1H[j];
-
-            if(beacon5s.get_manufactureId() == beacon1h.get_manufactureId() && beacon5s.get_major() == beacon1h.get_major() && beacon5s.get_minor() == beacon1h.get_minor()) { 
-                estPresent = true;
-                iPresent = j;
-                break;
-            }
-        }
-        if(estPresent) {
-          if (beacon5s.get_rssi() > listeBeacons1H[iPresent].get_rssi()){
-            listeBeacons1H[iPresent] = beacon5s;
-          }
-
-        } else {    
-            listeBeacons1H.push_back(beacon5s); 
-        }
-      }
+    listeBeacons1H = integrerNouveaux(listeBeacons1H, listeBeacons5SEC);
   }
 
   //Supprimer les beacons incomplets
