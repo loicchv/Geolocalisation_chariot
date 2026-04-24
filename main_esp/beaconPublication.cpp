@@ -22,8 +22,8 @@ void BeaconPublication::onResult(BLEAdvertisedDevice advertisedDevice) {
                 int minor = ENDIAN_CHANGE_U16(oBeacon.getMinor()); 
                 int rssi = advertisedDevice.getRSSI();
 
-                float latitude = monGPS->get_latitude().toFloat();
-                float longitude = monGPS->get_longitude().toFloat();
+                int latitude = monGPS->get_latitude();
+                int longitude = monGPS->get_longitude();
                 String heure = monGPS->get_heure();
 
                 Beacon newBeacon(manuFactureID, major, minor, rssi, latitude, longitude, heure);
