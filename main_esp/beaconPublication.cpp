@@ -1,5 +1,5 @@
 #include "beaconPublication.h"
-#include "moduleGPS.h"
+
 
 BeaconPublication::BeaconPublication(moduleGPS* gps){
     monGPS = gps;
