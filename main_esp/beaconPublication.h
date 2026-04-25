@@ -7,6 +7,7 @@
 #include <vector>
 using namespace std;
 #include "beacon.h"
+#include "moduleGPS.h"
 
 
 #ifndef BEACONPUBLICATION_H
