@@ -53,6 +53,15 @@ vector<Beacon> integrerNouveaux(vector<Beacon> listeEnvoi, vector<Beacon> listeN
   return listeEnvoi;
 }
 
+vector<Beacon> supprimerIncomplet(vector<Beacon> liste){
+  for(int i = 0; i < liste.size();){
+    Beacon beacon = liste[i];
+    if(beacon.get_major()==0 || beacon.get_minor()==0 || beacon.get_longitude()==0 || beacon.get_latitude()==0 || beacon.get_heure() == ":"){liste.erase(liste.begin()+i);}
+    else {i++;}
+  }
+  return liste;
+}
+
 void setup() {
   Serial.begin(115200);
   beaconPub = new BeaconPublication(&monGPS);
@@ -73,11 +82,7 @@ void loop() {
   }
 
   //Supprimer les beacons incomplets
-  for(int i = 0; i < listeBeacons1H.size();){
-    Beacon beacon = listeBeacons1H[i];
-    if(beacon.get_major()==0 || beacon.get_minor()==0 || beacon.get_longitude()==0 || beacon.get_latitude()==0 || beacon.get_heure() == ":"){listeBeacons1H.erase(listeBeacons1H.begin()+i);}
-    else {i++;}
-  }
+  listeBeacons1H = supprimerIncomplet(listeBeacons1H);
 
   //Mettre la liste des beacons sour le format d'une trame
   String trameFormater = formatTrame(listeBeacons1H); 
