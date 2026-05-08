@@ -86,12 +86,12 @@ void loop() {
   listeBeacons1H = supprimerIncomplet(listeBeacons1H);
 
   //Mettre la liste des beacons sour le format d'une trame
-  String trameFormater = formatTrame(listeBeacons1H); 
+  String trameFormatee = formatTrame(listeBeacons1H); 
   //Envoie de la trame vers la carte mkrwan
-  if(trameFormater!="{}"){
-    mkrwan.sendData(trameFormater);
+  if(trameFormatee!="{}"){
+    mkrwan.sendData(trameFormatee);
     Serial.print("Envoi effectuer :");
-    Serial.println(trameFormater);
+    Serial.println(trameFormatee);
   } 
 
   beaconPub->clear();
