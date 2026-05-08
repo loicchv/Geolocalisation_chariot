@@ -40,20 +40,20 @@ void setup(){
 }
 
 void loop(){
-    String trameFormater;
+    String trameFormatee;
     do{
-        trameFormater = ESP32.readData();
-    }while(trameFormater == "");
+        trameFormatee = ESP32.readData();
+    }while(trameFormatee == "");
         
     do{
-        String data = firstData(trameFormater);
+        String data = firstData(trameFormatee);
         Serial.println("Beacon en cours d'envoi : " + data);
         do {
             TTN.sendData(data);
             delay(5000);
         } while(TTN.get_accuser_reception() != true);
-        trameFormater = deleteData(trameFormater, data);
-    }while(trameFormater != "");
+        trameFormatee = deleteData(trameFormatee, data);
+    }while(trameFormatee != "");
 
     delay(1000);
 }
