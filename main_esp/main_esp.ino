@@ -6,6 +6,7 @@ using namespace std;
 #include "liaisonMKRWAN.h"
 
 int dureeScan = 5;
+int nbScansParHeure = 3600/dureeScan;
 vector<Beacon> listeBeacons5SEC;
 vector<Beacon> listeBeacons1H;
 moduleGPS monGPS(&Serial2, 27, 26);
@@ -73,7 +74,7 @@ void setup() {
 void loop() {
   monGPS.lireTrameGPGGA();
 
-  for(int k = 0; k < 720; k++){
+  for(int k = 0; k < nbScansParHeure; k++){
     //Scan des beacons
     beaconPub->start(dureeScan);
     listeBeacons5SEC = beaconPub->get_vectorBeacon();
