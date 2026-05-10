@@ -88,7 +88,9 @@ void loop() {
   //Mettre la liste des beacons sour le format d'une trame
   String trameFormatee = formatTrame(listeBeacons1H); 
   //Envoie de la trame vers la carte mkrwan
-  mkrwan.sendData(trameFormatee);
+  if(trameFormatee == "{}"){
+    mkrwan.sendData(trameFormatee);
+  }
 
 
   beaconPub->clear();
