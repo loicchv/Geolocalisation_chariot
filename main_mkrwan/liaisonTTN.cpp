@@ -41,7 +41,6 @@ void liaisonTTN::sendData(String data){
     accuser_reception = true;
   } else {
     accuser_reception = false;
-    Serial.println("Nononono");
   }
 }
 
