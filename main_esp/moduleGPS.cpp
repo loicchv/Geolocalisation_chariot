@@ -11,10 +11,6 @@ void moduleGPS::initialiser() {
 }
 
 void moduleGPS::lireTrameGPGGA() {    
-    // donnees[0] = ""; 
-    // donnees[1] = ""; 
-    // donnees[2] = "";
-
     while (gpsSerial->available() > 0) {
         String trame = gpsSerial->readStringUntil('\n'); 
 
@@ -27,7 +23,7 @@ void moduleGPS::lireTrameGPGGA() {
             int v6 = trame.indexOf(',', v5 + 1);
 
             if (v6 > 0) {
-                donnees[0] = trame.substring(v1 + 1, v2); //date 
+                donnees[0] = trame.substring(v1 + 1, v2); //heure 
                 
                 String Latitude = trame.substring(v2 + 1, v3); 
                 String dirLatitude = trame.substring(v3 + 1, v4); 
